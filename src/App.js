@@ -17,7 +17,6 @@ function App() {
       .then((response) => {
         setEvents(response.data);
         setLoading(false);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching events:", error);
@@ -25,46 +24,43 @@ function App() {
       });
   }, []);
 
-  // const indexOfLastEvent = currentPage * EVENTS_PER_PAGE;
-  // const indexOfFirstEvent = indexOfLastEvent - EVENTS_PER_PAGE;
-  const filteredEvents = events.filter(event =>
-    event.eventName.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredEvents = events.filter(
+    (event) =>
+      event.eventName &&
+      event.eventName.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
+
   const totalPages = Math.ceil(filteredEvents.length / EVENTS_PER_PAGE);
-  
   const indexOfLastEvent = currentPage * EVENTS_PER_PAGE;
   const indexOfFirstEvent = indexOfLastEvent - EVENTS_PER_PAGE;
   const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
-  
 
-  if (loading) return <p>Loading events...</p>;
+  if (loading) return <p className="text-center mt-10">Loading events...</p>;
+
   return (
-    <div className="w-screen h-full bg-[#E82677] py-20">
-      <div className="bg-white  mx-20 rounded-md relative">
-        <div className="flex justify-center items-center flex-col">
-          <div className="mt-14 text-2xl">Events</div>
-          <div className="flex items-center justify-center text-sm w-2/5 text-center">
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-            fugit, sed quia consequuntur.
-            
-          </div>
-         
-          <div className="w-full relative">
-          <input
-            type="text"
-            placeholder="Search events by name..."
-            className="border p-4 mr-16 rounded mb-6 w-1/3 absolute inset-y-0 right-0"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1); // reset to first page on search
-            }}
-          />
+    <div className="w-full min-h-screen bg-[#E82677] py-10 px-4 sm:px-8">
+      <div className="bg-white rounded-md max-w-7xl mx-auto p-4 sm:p-8">
+        <div className="flex flex-col items-center">
+          <h1 className="text-xl sm:text-2xl font-semibold mt-6">Events</h1>
+          <p className="text-sm sm:text-base text-center mt-2 max-w-xl">
+            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
+            sed quia consequuntur.
+          </p>
+
+          <div className="w-full mt-6 flex justify-end">
+            <input
+              type="text"
+              placeholder="Search events by name..."
+              className="border p-2 sm:p-3 rounded w-full sm:w-1/2 md:w-1/3"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
           </div>
 
-          <div className="grid gap-3  mt-10 grid-cols-4">
-            
+          <div className="grid gap-4 mt-8 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {currentEvents.map((event) => (
               <Card
                 key={event.id}
@@ -75,7 +71,8 @@ function App() {
               />
             ))}
           </div>
-          <div className="flex justify-center mt-6 space-x-2 pb-10">
+
+          <div className="flex flex-wrap justify-center mt-8 gap-2">
             {[...Array(totalPages)].map((_, idx) => {
               const pageNum = idx + 1;
               return (

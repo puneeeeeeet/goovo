@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("https://67ff48fa58f18d7209f09751.mockapi.io/v1/events")
+      .get(process.env.REACT_APP_API_URL)
       .then((response) => {
         setEvents(response.data);
         setLoading(false);
